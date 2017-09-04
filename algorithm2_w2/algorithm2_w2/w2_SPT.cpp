@@ -4,6 +4,7 @@
 #include <string>
 #include <vector>
 #include <queue>
+#include <set>
 #include <algorithm>
 
 #define NUM_VER 200
@@ -29,8 +30,8 @@ public:
 // comparator for building min heap
 class HEAP_COMP{
 public: 
-	bool operator() (const HEAP_ELM& v1, HEAP_ELM& v2){
-		return v1.getEdge() > v2.getEdge();
+	bool operator() (const HEAP_ELM& v1, const HEAP_ELM& v2){
+		return v1.getEdge() < v2.getEdge();
 	}
 };
 
@@ -71,26 +72,25 @@ int main(){
 		A[i] = numeric_limits<int>::max();
 	}
 
-	priority_queue<HEAP_ELM, vector<HEAP_ELM>, HEAP_COMP> spt;
-	// insert source vertex into spt and make its distance 0
-	spt.push(HEAP_ELM(0, 0)); A[0] = 0;
-
+	set<HEAP_ELM, HEAP_COMP> spt;
+	spt.insert(HEAP_ELM(0, 0)); A[0] = 0;
 
 	while (!spt.empty()){
-		int v = spt.top().getVer(); 
-		spt.pop();
+		int u = spt.begin()->getVer();
+		spt.erase(spt.begin());
 
-		for (int i = 0; i < num_conn[v]; i++){
-			int w = ver_arr[v][i].getVer() - 1;
-			int l_vw = ver_arr[v][i].getEdge();
-			// pick only the minimum (A[v] + l_vw)
-			if (A[w] > A[v] + l_vw){
-				A[w] = A[v] + l_vw;
-				spt.push(HEAP_ELM(A[w], w));
+		for (int i = 0; i < num_conn[u]; i++){
+			int v = ver_arr[u][i].getVer() - 1;
+			int l_vw = ver_arr[u][i].getEdge();
+			if (A[v] > A[u] + l_vw){
+
+				A[v] = A[u] + l_vw;
+				spt.insert(HEAP_ELM(A[v], v));
 			}
 		}
 
 	}
+
 
 	cout << A[6] << endl;
 	cout << A[36] << endl;
