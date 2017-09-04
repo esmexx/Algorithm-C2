@@ -2,6 +2,8 @@
 #include <fstream>
 #include <sstream>
 #include <string>
+#include <vector>
+#include <queue>
 #include <algorithm>
 
 #define NUM_VER 200
@@ -60,6 +62,57 @@ int main(){
 		}
 	}
 
+
+	//int *dist = new int[NUM_VER];
+	//dist[0] = 0;
+	//for (int i = 1; i < NUM_VER; i++)
+	//	dist[i] = numeric_limits<int>::max();
+
+	HEAP_ELM* output = new HEAP_ELM[NUM_VER];
+	output[0] = HEAP_ELM(0,0);
+	for (int i = 0; i < NUM_VER; i++){
+		output[i] = HEAP_ELM(numeric_limits<int>::max(), i);
+	}
+
+
+	priority_queue<HEAP_ELM, vector<HEAP_ELM>, HEAP_COMP> spt_to_be;
+	spt_to_be.push(HEAP_ELM(0, 0)); // assign 0 weight for the source vertex
+	//for (int i = 1; i < NUM_VER; i++){
+	//	spt_to_be.push(HEAP_ELM(numeric_limits<int>::max(), i)); // assign INF for all other vertices
+	//}
+
+	while (!spt_to_be.empty()){
+		//HEAP_ELM htop = spt_to_be.top();
+		//output[htop.getVer()] = htop;
+
+		//int add_w = htop.getEdge();
+		//
+		//while (!spt_to_be.empty()){
+		//	spt_to_be.pop();
+		//}
+
+		//for (int i = 0; i < num_conn[htop.getVer()]; i++){
+		//	HEAP_ELM ver_conn = ver_arr[htop.getVer()][i];
+		//	spt_to_be.push(HEAP_ELM(ver_conn.getEdge() + add_w, ver_conn.getVer()));
+		//}
+
+	}
+
+
+	//while (!spt_to_be.empty()){
+	//	HEAP_ELM htop = spt_to_be.top();
+	//	for (int i = 0; i < num_conn[htop.getVer()]; i++){
+	//		int u = ver_arr[htop.getVer()][i].getVer();
+	//		int w = ver_arr[htop.getVer()][i].getEdge();
+	//		
+	//	}
+	//}
+
+
+	//HEAP_ELM p = pq.top();
+	//cout << p.getEdge() << " " << p.getVer() << endl;
+	//pq.pop();
+	//p = pq.top();
 
 
 	return 0;
