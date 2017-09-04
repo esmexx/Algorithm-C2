@@ -10,6 +10,8 @@
 
 using namespace std;
 
+// http://www.geeksforgeeks.org/dijkstras-shortest-path-algorithm-using-priority_queue-stl/
+
 // heap element {edge weight, vertice}
 class HEAP_ELM {
 	int Edge;
@@ -62,58 +64,42 @@ int main(){
 		}
 	}
 
-
-	//int *dist = new int[NUM_VER];
-	//dist[0] = 0;
-	//for (int i = 1; i < NUM_VER; i++)
-	//	dist[i] = numeric_limits<int>::max();
-
-	HEAP_ELM* output = new HEAP_ELM[NUM_VER];
-	output[0] = HEAP_ELM(0,0);
+	// initialize distances of all vertices as infinite
+	vector<int> dist; 
+	dist.resize(NUM_VER);
 	for (int i = 0; i < NUM_VER; i++){
-		output[i] = HEAP_ELM(numeric_limits<int>::max(), i);
+		dist[i] = numeric_limits<int>::max();
 	}
 
+	priority_queue<HEAP_ELM, vector<HEAP_ELM>, HEAP_COMP> pq;
+	// insert source vertex into pq and make its distance 0
+	pq.push(HEAP_ELM(0, 0)); dist[0] = 0;
 
-	priority_queue<HEAP_ELM, vector<HEAP_ELM>, HEAP_COMP> spt_to_be;
-	spt_to_be.push(HEAP_ELM(0, 0)); // assign 0 weight for the source vertex
-	//for (int i = 1; i < NUM_VER; i++){
-	//	spt_to_be.push(HEAP_ELM(numeric_limits<int>::max(), i)); // assign INF for all other vertices
-	//}
 
-	while (!spt_to_be.empty()){
-		//HEAP_ELM htop = spt_to_be.top();
-		//output[htop.getVer()] = htop;
-
-		//int add_w = htop.getEdge();
-		//
-		//while (!spt_to_be.empty()){
-		//	spt_to_be.pop();
-		//}
-
-		//for (int i = 0; i < num_conn[htop.getVer()]; i++){
-		//	HEAP_ELM ver_conn = ver_arr[htop.getVer()][i];
-		//	spt_to_be.push(HEAP_ELM(ver_conn.getEdge() + add_w, ver_conn.getVer()));
-		//}
+	while (!pq.empty()){
+		int u = pq.top().getVer(); // extract minimum distance vertex from pq
+		pq.pop();
+		for (int i = 0; i < num_conn[u]; i++){
+			int v = ver_arr[u][i].getVer() - 1;
+			int w = ver_arr[u][i].getEdge();
+			if (dist[v] > dist[u] + w){
+				dist[v] = dist[u] + w;
+				pq.push(HEAP_ELM(dist[v], v));
+			}
+		}
 
 	}
 
-
-	//while (!spt_to_be.empty()){
-	//	HEAP_ELM htop = spt_to_be.top();
-	//	for (int i = 0; i < num_conn[htop.getVer()]; i++){
-	//		int u = ver_arr[htop.getVer()][i].getVer();
-	//		int w = ver_arr[htop.getVer()][i].getEdge();
-	//		
-	//	}
-	//}
-
-
-	//HEAP_ELM p = pq.top();
-	//cout << p.getEdge() << " " << p.getVer() << endl;
-	//pq.pop();
-	//p = pq.top();
-
+	cout << dist[6] << endl;
+	cout << dist[36] << endl;
+	cout << dist[58] << endl;
+	cout << dist[81] << endl;
+	cout << dist[98] << endl;
+	cout << dist[114] << endl;
+	cout << dist[132] << endl;
+	cout << dist[164] << endl;
+	cout << dist[187] << endl;
+	cout << dist[196] << endl;
 
 	return 0;
 }
