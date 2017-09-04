@@ -54,7 +54,7 @@ int main(){
 			replace_if(line.begin(), line.end(), ispunct, ' ');  // replace "," with space
 			stringstream connection(line);
 			connection >> tmp_ver;
-			if (stoi(tmp_ver) != (vc + 1)){ cout << "no!" << endl; };
+			if (stoi(tmp_ver) != (vc + 1)){ cout << "no!" << endl; }; // check if the vertices are in order
 
 			for (int i = 0; i < nc; i++){
 				connection >> tmp_conn >> tmp_edge;
@@ -65,41 +65,44 @@ int main(){
 	}
 
 	// initialize distances of all vertices as infinite
-	vector<int> dist; 
-	dist.resize(NUM_VER);
+	vector<int> A; 
+	A.resize(NUM_VER);
 	for (int i = 0; i < NUM_VER; i++){
-		dist[i] = numeric_limits<int>::max();
+		A[i] = numeric_limits<int>::max();
 	}
 
-	priority_queue<HEAP_ELM, vector<HEAP_ELM>, HEAP_COMP> pq;
-	// insert source vertex into pq and make its distance 0
-	pq.push(HEAP_ELM(0, 0)); dist[0] = 0;
+	priority_queue<HEAP_ELM, vector<HEAP_ELM>, HEAP_COMP> spt;
+	// insert source vertex into spt and make its distance 0
+	spt.push(HEAP_ELM(0, 0)); A[0] = 0;
 
 
-	while (!pq.empty()){
-		int u = pq.top().getVer(); // extract minimum distance vertex from pq
-		pq.pop();
-		for (int i = 0; i < num_conn[u]; i++){
-			int v = ver_arr[u][i].getVer() - 1;
-			int w = ver_arr[u][i].getEdge();
-			if (dist[v] > dist[u] + w){
-				dist[v] = dist[u] + w;
-				pq.push(HEAP_ELM(dist[v], v));
+	while (!spt.empty()){
+		int v = spt.top().getVer(); 
+		spt.pop();
+
+		for (int i = 0; i < num_conn[v]; i++){
+			int w = ver_arr[v][i].getVer() - 1;
+			int l_vw = ver_arr[v][i].getEdge();
+			// pick only the minimum (A[v] + l_vw)
+			if (A[w] > A[v] + l_vw){
+				A[w] = A[v] + l_vw;
+				spt.push(HEAP_ELM(A[w], w));
 			}
 		}
 
 	}
 
-	cout << dist[6] << endl;
-	cout << dist[36] << endl;
-	cout << dist[58] << endl;
-	cout << dist[81] << endl;
-	cout << dist[98] << endl;
-	cout << dist[114] << endl;
-	cout << dist[132] << endl;
-	cout << dist[164] << endl;
-	cout << dist[187] << endl;
-	cout << dist[196] << endl;
+	cout << A[6] << endl;
+	cout << A[36] << endl;
+	cout << A[58] << endl;
+	cout << A[81] << endl;
+	cout << A[98] << endl;
+	cout << A[114] << endl;
+	cout << A[132] << endl;
+	cout << A[164] << endl;
+	cout << A[187] << endl;
+	cout << A[196] << endl;
+
 
 	return 0;
 }
