@@ -104,5 +104,12 @@ int main(){
 	cout << A[196] << endl;
 
 
+	for (int i = 0; i < NUM_VER; i++){
+		delete[] ver_arr[i];
+	}
+	delete[] ver_arr;
+
+	delete[] num_conn;
+
 	return 0;
 }
