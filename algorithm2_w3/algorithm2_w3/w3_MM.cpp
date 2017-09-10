@@ -70,36 +70,28 @@ int main(){
 
 	
 	for (int i = 1; i < N; i++){
-		if (num[i] > less_max_heap.top()){
-			greater_min_heap.push(num[i]);
-			if (~(less_max_heap.size() == greater_min_heap.size()) && (i % 2 != 0)){
-				moveA2B(greater_min_heap, less_max_heap);
-				sum += less_max_heap.top();
-			}
-			else {
-				if (less_max_heap.size() == greater_min_heap.size()){
-					sum += less_max_heap.top();
+		(num[i] > less_max_heap.top()) ? greater_min_heap.push(num[i]) : less_max_heap.push(num[i]);
+
+		if ((i + 1) % 2 == 0){
+
+			while (less_max_heap.size() != greater_min_heap.size()){
+				if (less_max_heap.size() > greater_min_heap.size()){
+					moveA2B(less_max_heap, greater_min_heap);
 				}
-				else {
-					sum += greater_min_heap.top();
+				else if (less_max_heap.size() < greater_min_heap.size()){
+					moveA2B(greater_min_heap, less_max_heap);
 				}
 			}
+			sum += less_max_heap.top();
 		}
-		else {
-			less_max_heap.push(num[i]);
-			if (~(less_max_heap.size() == greater_min_heap.size()) && (i % 2 != 0)){
-				moveA2B(less_max_heap, greater_min_heap);
-				sum += less_max_heap.top();
-			}
-			else {
-				sum += less_max_heap.top();
-			}
+		else{
+			less_max_heap.size() > greater_min_heap.size() ? sum += less_max_heap.top() : sum += greater_min_heap.top();
 		}
 
 	}
 
 
-	cout << sum << endl;
+	cout << sum%10000 << endl;
 
 
 	delete[] num;
