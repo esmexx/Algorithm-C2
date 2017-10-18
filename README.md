@@ -1,6 +1,6 @@
 # Algorithm
 
-Course 2: Graph Search, Shortest Paths, and Data Structures
+* Course 2: Graph Search, Shortest Paths, and Data Structures
 
 | Week  | 	          Problem            |     Method    |  Implementation |
 | ----- | ------------------------------ | ------------- | ------------- |
@@ -9,7 +9,7 @@ Course 2: Graph Search, Shortest Paths, and Data Structures
 |   3   |            Median Maintenance  |            | Heap, Priority Queue |
 |   4   |            Two Sum    |             | Hashing|
 
-Course 3: Greedy Algorithms, Minimum Spanning Trees, and Dynamic Programming
+* Course 3: Greedy Algorithms, Minimum Spanning Trees, and Dynamic Programming
 
 | Week  | 	          Problem            |     Method    | Implementation |
 | ----- | ------------------------------ | ------------- | ------------- |
