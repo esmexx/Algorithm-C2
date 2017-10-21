@@ -15,3 +15,4 @@
 | ----- | ------------------------------ | ------------- | ------------- |
 |   1   |                Job Scheduling  |  | Heap, Multiset |
 | 1.2   |   Minimum Spanning Tree | Prim's Algorithm | Heap, Multiset |
+| 1.3   |   Minimum Spanning Tree | Prim's Algorithm | Adjacency Matrix, 2D Array |
