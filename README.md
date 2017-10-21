@@ -14,3 +14,4 @@
 | Week  | 	          Problem            |     Method    | Implementation |
 | ----- | ------------------------------ | ------------- | ------------- |
 |   1   |                Job Scheduling  |  | Heap, Multiset |
+| 1.2   |   Minimum Spanning Tree | Prim's Algorithm | Heap, Multiset |
