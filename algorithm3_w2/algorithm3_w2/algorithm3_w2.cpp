@@ -11,98 +11,63 @@
 using namespace std;
 
 class HEAP_ELM {
-	int EdgeHead = -1;
-	vector<pair<int, int>> EdgeTails; 
-	int VecLen = 500; // initialize number of tails from the head node, default 500, expand if exceed
-	// note that the graph is fully connected (there are 500 head nodes and 124750 edges)
-	int NumTails = 0; // count number of tails
+	int head;
+	int tail;
+	int cost;
 
 public:
-	HEAP_ELM() { }
-	HEAP_ELM(int _EdgeHead){
-		EdgeHead = _EdgeHead;
-		EdgeTails.resize(VecLen, make_pair(-1, 0));
+	HEAP_ELM() {}
+	HEAP_ELM(int _head, int _tail, int _cost) {
+		head = _head;
+		tail = _tail;
+		cost = _cost;
 	}
 
-	int GetHead() const { return EdgeHead; }
-	int GetNumTails() const { return NumTails; }
-
-	void AddTail(int _EdgeTail, int _EdgeCost){
-		if (NumTails < VecLen){
-			EdgeTails[NumTails] = make_pair(_EdgeTail, _EdgeCost);
-			NumTails++;
-		}
-		else { // expand vector if not enough
-			VecLen *= 2;
-			EdgeTails.resize(VecLen, make_pair(-1, 0));
-			AddTail(_EdgeTail, _EdgeCost);
-		}
-	}
-
-	pair<int, int> GetTail(int i) {
-		return EdgeTails[i]; 	// get the ith tail
-	}
+	int GetHead() const { return head; }
+	int GetTail() const { return tail; }
+	int GetCost() const { return cost; }
 
 };
 
 
 class HEAP_COMP{
 public:
-	bool operator() (const pair<int, int>& v1, const pair<int, int>& v2){
-		if (abs(v1.second - v2.second) < std::numeric_limits<double>::epsilon()){
-			return true; // break tie "arbitrarily"
-		}
-		else {
-			return v1.second < v2.second;
-		}
+	bool operator() (const HEAP_ELM& v1, const HEAP_ELM& v2){
+		return v1.GetCost() < v2.GetCost();   // multiset handles cost tie arbitrarily
 	}
 };
 
 
 int main() {
 
-	string clsfile = "C:\\Users\\Xiaoxuan\\Desktop\\cousera\\algorithm stanford\\course 3\\w2_clustering.txt";
+	string clsfile = "C:\\Users\\Xiaoxuan\\Desktop\\cousera\\algorithm stanford\\course 3\\w2_clustering_short.txt";
 	string line, ntmp, htmp, ttmp, ctmp;
-	HEAP_ELM* num = NULL;
-	int i = 0, N;
+	int M = -1, N;
+	multiset<HEAP_ELM, HEAP_COMP> kcluster;
 
 
 	// build an undirected graph while reading data
 	ifstream myfile(clsfile);
-
-
 	if (myfile.is_open()) {
 		while (getline(myfile, line)){
-			if (i == 0){
+			if (M == -1){
 				stringstream connection(line);
 				connection >> ntmp;
 				N = stoi(ntmp);
-				if (num == NULL) { num = new HEAP_ELM[N]; } 
-				i++;
+				M++;
 			}
 			else {
 				stringstream connection(line);
 				connection >> htmp >> ttmp >> ctmp;
-
-				// head -> tail
-				if (num[stoi(htmp) - 1].GetHead() == -1){
-					num[stoi(htmp) - 1] = HEAP_ELM(stoi(htmp));
-				}
-				num[stoi(htmp) - 1].AddTail(stoi(ttmp), stoi(ctmp));
-
-				// tail -> head
-				if (num[stoi(ttmp) - 1].GetHead() == -1){
-					num[stoi(ttmp) - 1] = HEAP_ELM(stoi(ttmp));
-				}
-				num[stoi(ttmp) - 1].AddTail(stoi(htmp), stoi(ctmp));
-				
-				i++;
+				kcluster.insert(HEAP_ELM(stoi(htmp), stoi(ttmp), stoi(ctmp)));
+				M++;
 			}
-
 		}
 	}
 
-	
 
+
+
+	
 	return 0;
 }
