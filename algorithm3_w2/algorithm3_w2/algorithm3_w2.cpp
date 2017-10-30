@@ -2,8 +2,6 @@
 #include <fstream>
 #include <sstream>
 #include <string>
-#include <queue>
-#include <vector>
 #include <stdio.h>
 #include <set>
 
@@ -66,16 +64,11 @@ bool doContinue(int parent[], int N){
 	return num_cls > NUM_CLS;
 }
 
-void isCycle(int parent[], int i, int j){
-	int ph = Find(parent, i);
-	int pt = Find(parent, j);
+bool isCycle(int parent[], int i, int j){
+	int pi = Find(parent, i);
+	int pj = Find(parent, j);
 
-	if (abs(ph - pt) < std::numeric_limits<double>::epsilon()) {
-		return;
-	}
-	else {
-		Union(parent, ph, pt);
-	}
+	return (abs(pi - pj) < std::numeric_limits<double>::epsilon());
 }
 
 
@@ -112,34 +105,35 @@ int main() {
 		parent[i] = -1;
 	}
 
+	
+	while (!kcluster.empty()) {
+		if (doContinue(parent, N)){
+			int h = kcluster.begin()->GetHead();
+			int t = kcluster.begin()->GetTail();
 
-	while (doContinue(parent, N)){
-		int h = kcluster.begin()->GetHead();
-		int t = kcluster.begin()->GetTail();
-
-		kcluster.erase(kcluster.begin());		
-		isCycle(parent, h - 1, t - 1);
-
-	}
-
-
-
-	while (!kcluster.empty()){
-		int h = kcluster.begin()->GetHead();
-		int t = kcluster.begin()->GetTail();
-
-		int ph = Find(parent, h-1);
-		int pt = Find(parent, t-1);
-
-		if (abs(ph - pt) < std::numeric_limits<double>::epsilon()) {
 			kcluster.erase(kcluster.begin());
+			if (isCycle(parent, h - 1, t - 1)) {
+				continue;
+			}
+			else {
+				Union(parent, h - 1, t - 1);
+			}
+
 		}
 		else {
-			cout << "max spacing: " << kcluster.begin()->GetCost() << endl;
-			break;
-		}
-	}
+			int h = kcluster.begin()->GetHead();
+			int t = kcluster.begin()->GetTail();
 
+			if (isCycle(parent, h - 1, t - 1)) {
+				kcluster.erase(kcluster.begin());
+			}
+			else {
+				cout << "max spacing: " << kcluster.begin()->GetCost() << endl;
+				break;
+			}
+		}
+
+	}
 
 	
 	return 0;
