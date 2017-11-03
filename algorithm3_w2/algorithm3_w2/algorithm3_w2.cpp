@@ -48,6 +48,7 @@ int Find(int parent[], int i){
 
 
 void Union(int parent[], int i, int j){
+	// union by rank: http://www.geeksforgeeks.org/union-find-algorithm-set-2-union-by-rank/
 	int pi = Find(parent, i);
 	int pj = Find(parent, j);
 
