@@ -42,7 +42,6 @@ int main() {
 	}
 
 	Ncls = NodeSet.size();
-	int maxNcls = Ncls;
 
 	unordered_set<string>::iterator iter = NodeSet.begin();
 	unordered_set<string>::iterator pos, pos1, pos2;
@@ -59,9 +58,8 @@ int main() {
 			// if the candidate node is in the hash table, "merge" it to the given node
 			if (pos != NodeSet.end()){
 				// store the node to another hash table (alternative to merge) 
-				NodeMerged.insert(*pos); 
+				NodeMerged.insert(ber); 
 				NodeMerged.insert(be); 
-				maxNcls--;
 			}
 		}
 
@@ -70,7 +68,7 @@ int main() {
 
 	iter = NodeSet.begin(); // reset the iterator
 
-	
+	// precompute index pair for changing 2 bits
 	vector<pair<int, int>> BitPair;
 	BitPair.resize(Nbit * (Nbit-1) / 2); // C^2_24
 	int ct = 0;
@@ -82,8 +80,6 @@ int main() {
 			}
 		}
 	}
-
-
 
 	for (int i = 0; i < Ncls; i++){
 		string be = *iter;
@@ -99,13 +95,11 @@ int main() {
 			ber[k] = (1 - (ber[k] - '0')) + '0';
 
 			pos1 = NodeSet.find(ber);
-			pos2 = NodeMerged.find(ber); // check for nodes that has already been merged
 
-			// if the candidate node is in the hash table, and has not been merged before, "merge" it
-			if (pos1 != NodeSet.end() && pos2 == NodeMerged.end()) {
-				NodeMerged.insert(*pos1);
+			// if the candidate node is in the hash table, "merge" it
+			if (pos1 != NodeSet.end() ) {
+				NodeMerged.insert(ber);
 				NodeMerged.insert(be);
-				maxNcls--;
 			}
 		}
 
@@ -113,7 +107,7 @@ int main() {
 
 	}
 
-	cout << "largest value of k needed is " << maxNcls << endl;
+	cout << "largest value of k needed is " << Ncls-NodeMerged.size()+1 << endl;
 
 	return 0;
 }
