@@ -12,11 +12,13 @@ using namespace std;
 
 int main() {
 
-	string clsfile = "C:\\Users\\Xiaoxuan\\Desktop\\cousera\\algorithm stanford\\course 3\\w2_clustering_big.txt";
+	//string clsfile = "C:\\Users\\Xiaoxuan\\Desktop\\cousera\\algorithm stanford\\course 3\\w2_clustering_big.txt";
+	string clsfile = "C:\\Users\\Xiaoxuan\\Desktop\\cousera\\algorithm stanford\\course 3\\clustering2-example-200-12-solution-10.txt";
+	//string clsfile = "C:\\Users\\Xiaoxuan\\Desktop\\cousera\\algorithm stanford\\course 3\\clustering2-example-200-12-solution-6.txt";
 	string line, Ne, Nb, Te, TeStr;
 
 	unordered_set<string> NodeSet;
-	unordered_set<string> NodeMerged;
+	unordered_set<string> NodeMerged; // store all the nodes which get merged into the same cluster
 
 	int Ncls = -1, Nbit = 0;
 	ifstream myfile(clsfile);
@@ -41,10 +43,10 @@ int main() {
 		}
 	}
 
-	Ncls = NodeSet.size();
+	Ncls = NodeSet.size(); // count unique nodes (since repeated nodes were ignored by unordered_set)
 
 	unordered_set<string>::iterator iter = NodeSet.begin();
-	unordered_set<string>::iterator pos, pos1, pos2;
+	unordered_set<string>::iterator posN, posM1, posM2;
 
 	for (int i = 0; i < Ncls; i++){
 		string be = *iter; // get the 24-bit node
@@ -53,24 +55,29 @@ int main() {
 		for (int j = 0; j < Nbit; j++){
 			string ber = be;
 			ber[j] = ( 1- (ber[j] - '0') ) + '0'; // change 1 bit of the node
-			pos = NodeSet.find(ber);
 
-			// if the candidate node is in the hash table, "merge" it to the given node
-			if (pos != NodeSet.end()){
-				// store the node to another hash table (alternative to merge) 
-				NodeMerged.insert(ber); 
-				NodeMerged.insert(be); 
+			posM1 = NodeMerged.find(be);
+			posM2 = NodeMerged.find(ber);
+
+			// if the two nodes are not in the same cluster (i.e., they have not been merged)
+			if (!(posM1 != NodeMerged.end() && posM2 != NodeMerged.end())) {
+				posN = NodeSet.find(ber); // find the candidate node in the set
+				if (posN != NodeSet.end()){ // if the candidate node presented in the set
+					// merge it to the cluster
+					NodeMerged.insert(ber);
+					NodeMerged.insert(be);
+				}
 			}
 		}
 
-		iter++;
+		iter++; // get the next node
 	}
 
-	iter = NodeSet.begin(); // reset the iterator
 
 	// precompute index pair for changing 2 bits
 	vector<pair<int, int>> BitPair;
-	BitPair.resize(Nbit * (Nbit-1) / 2); // C^2_24
+	int bplen = Nbit * (Nbit - 1) / 2;
+	BitPair.resize(bplen); // C^2_24
 	int ct = 0;
 	for (int j = 0; j < Nbit; j++){
 		for (int k = 0; k < Nbit; k++){
@@ -81,11 +88,12 @@ int main() {
 		}
 	}
 
+	iter = NodeSet.begin(); // reset the iterator
 	for (int i = 0; i < Ncls; i++){
 		string be = *iter;
 		
 		// find all possible nodes with distance 2 from the given node
-		for (int p = 0; p < (Nbit*(Nbit - 1) / 2); p++) {
+		for (int p = 0; p < bplen; p++) {
 			int j = BitPair[p].first;
 			int k = BitPair[p].second;
 
@@ -94,12 +102,17 @@ int main() {
 			ber[j] = (1 - (ber[j] - '0')) + '0'; 
 			ber[k] = (1 - (ber[k] - '0')) + '0';
 
-			pos1 = NodeSet.find(ber);
+			posM1 = NodeMerged.find(be);
+			posM2 = NodeMerged.find(ber);
 
-			// if the candidate node is in the hash table, "merge" it
-			if (pos1 != NodeSet.end() ) {
-				NodeMerged.insert(ber);
-				NodeMerged.insert(be);
+			// if the two nodes are not in the same cluster (i.e., they have not been merged)
+			if (!(posM1 != NodeMerged.end() && posM2 != NodeMerged.end())) {
+				posN = NodeSet.find(ber); // find the candidate node in the set
+				if (posN != NodeSet.end()){ // if the candidate node presented in the set
+					// merge it to the cluster
+					NodeMerged.insert(ber);
+					NodeMerged.insert(be);
+				}
 			}
 		}
 
