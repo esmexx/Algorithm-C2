@@ -4,6 +4,7 @@
 #include <string>
 #include <vector>
 #include <math.h>
+#include <time.h>
 #include <unordered_set>
 
 
@@ -49,6 +50,8 @@ bool isCycle(long parent[], long i, long j){
 
 int main() {
 
+	clock_t time;
+	time = clock();
 
 	string clsfile = "C:\\Users\\Xiaoxuan\\Desktop\\cousera\\algorithm stanford\\course 3\\w2_clustering_big.txt";
 	
@@ -187,6 +190,8 @@ int main() {
 		}
 	}
 
+	time = clock() - time;
+	cout << "Time spent:" << (float)time / CLOCKS_PER_SEC << "seconds" << endl;
 	cout << "max cluster number: " << maxCls << endl;
 
 	delete[] parent;
