@@ -16,3 +16,6 @@
 |   1   |                Job Scheduling  |  | Heap, Multiset |
 | 1.2   |   Minimum Spanning Tree | Prim's Algorithm | Heap, Multiset |
 | 1.3   |   Minimum Spanning Tree | Prim's Algorithm | Adjacency Matrix, 2D Array |
+| 2 | Max-Spacing K Clustering | Kruskal's Algorithm | Heap, Multiset |
+| 2.2 | Max-Spacing K Clustering | Hamming distance, Kruskal's Algorithm | Hashing, Unordered Set |
+| 3.1 | Huffman Encoding Tree (bottom-up) |  | Heap, Multiset |  
