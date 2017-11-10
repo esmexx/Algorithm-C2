@@ -74,6 +74,8 @@ int main() {
 	}
 
 
+	multiset<long long> not_visited; // store all the tree nodes and metanodes as not visited
+
 	while (hfm_tree.size() > 1){
 		// get first two nodes from the heap and combine them into a metanode, 
 		// then insert the metanode back to the heap
@@ -84,17 +86,21 @@ int main() {
 			// if the node on the top is not a "stand-alone" node, then create new tree 
 			// node inheriting from all children nodes
 			ltmp = new TreeNode(hfm_tree.begin()->GetLeft(), hfm_tree.begin()->GetRight());
+			not_visited.insert(ltmp->GetWeight());
 		}
 		else {
 			ltmp = new TreeNode(hfm_tree.begin()->GetWeight());
+			not_visited.insert(ltmp->GetWeight());
 		}
 		hfm_tree.erase(hfm_tree.begin());
 
 		if (hfm_tree.begin()->GetLeft() != NULL && hfm_tree.begin()->GetRight() != NULL){
 			rtmp = new TreeNode(hfm_tree.begin()->GetLeft(), hfm_tree.begin()->GetRight());
+			not_visited.insert(rtmp->GetWeight());
 		}
 		else {
 			rtmp = new TreeNode(hfm_tree.begin()->GetWeight());
+			not_visited.insert(rtmp->GetWeight());
 		}
 		hfm_tree.erase(hfm_tree.begin());
 
@@ -108,21 +114,28 @@ int main() {
 
 	// get the root from heap
 	TreeNode* root = new TreeNode(hfm_tree.begin()->GetLeft(), hfm_tree.begin()->GetRight());
+	not_visited.insert(root->GetWeight());
 
 	// use a BFS approach to compute node height
-	unordered_set<long long> visited; // use a hash table to store visited nodes  
 	queue<TreeNode*> tnq;
 	int hfm_len = 0;
 
 
 	tnq.push(root);
-	visited.insert(root->GetWeight()); // mark root as visited
+	// mark root as visited, i.e. remove node from unvisited
+	if (not_visited.find(root->GetWeight()) != not_visited.end()){
+		not_visited.erase(not_visited.equal_range(root->GetWeight()).first);
+	}
 
 	while (!tnq.empty()) {
 		TreeNode* v = tnq.front();
 		tnq.pop();
 
-		visited.insert(v->GetWeight()); // mark v as visited
+		// mark v as visited, i.e. remove node from unvisited
+		if (not_visited.find(v->GetWeight()) != not_visited.end()){
+			not_visited.erase(not_visited.equal_range(v->GetWeight()).first);
+		}
+
 
 		// process all children nodes of v
 		TreeNode* lv = v->GetLeft();
@@ -130,10 +143,10 @@ int main() {
 		// if lv has not been visited   
 		// cannot handle repeated node weight!!
 		if (lv != NULL) {
-			if (visited.find(lv->GetWeight()) == visited.end()) {
+			if (not_visited.find(lv->GetWeight()) != not_visited.end()) {
 				tnq.push(lv);
 				//mark left node to be visited
-				visited.insert(lv->GetWeight());
+				not_visited.erase(not_visited.equal_range(lv->GetWeight()).first);
 			}
 		}
 
@@ -141,9 +154,9 @@ int main() {
 
 		TreeNode* rv = v->GetRight();
 		if (rv != NULL) {
-			if (visited.find(rv->GetWeight()) == visited.end()){
+			if (not_visited.find(rv->GetWeight()) != not_visited.end()){
 				tnq.push(rv);
-				visited.insert(rv->GetWeight());
+				not_visited.erase(not_visited.equal_range(rv->GetWeight()).first);
 			}
 		}
 
