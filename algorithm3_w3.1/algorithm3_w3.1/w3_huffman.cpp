@@ -61,6 +61,7 @@ int maxHeight(TreeNode* p) {
 }
 
 // https://discuss.leetcode.com/topic/8723/my-4-line-java-solution/3
+// http://www.geeksforgeeks.org/find-minimum-depth-of-a-binary-tree/
 int minHeight(TreeNode* p) {
 	if (!p) return 0;
 	if (!p->GetLeft()) {
