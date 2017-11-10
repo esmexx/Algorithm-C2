@@ -11,6 +11,8 @@
 using namespace std;
 
 
+//https://stackoverflow.com/questions/17637336/how-to-build-a-binary-tree-from-the-leaves-to-the-root
+// https://gist.github.com/mgechev/5911348
 class TreeNode {
 private:
 	long long weight;
@@ -47,10 +49,34 @@ public:
 };
 
 
+// https://articles.leetcode.com/maximum-height-of-binary-tree/
+int maxHeight(TreeNode* p) {
+
+	if (!p) return 0;
+	long long left_height = maxHeight(p->GetLeft());
+	long long right_height = maxHeight(p->GetRight());
+
+	return (left_height > right_height) ? left_height + 1 : right_height + 1;
+
+}
+
+// https://discuss.leetcode.com/topic/8723/my-4-line-java-solution/3
+int minHeight(TreeNode* p) {
+	if (!p) return 0;
+	if (!p->GetLeft()) {
+		return minHeight(p->GetRight()) + 1;
+	}
+	if (!p->GetRight()){
+		return minHeight(p->GetLeft()) + 1;
+	}
+
+	return min(minHeight(p->GetLeft()), minHeight(p->GetRight())) + 1;
+}
+
 
 int main() {
 
-	string hfmfile = "C:\\Users\\Xiaoxuan\\Desktop\\cousera\\algorithm stanford\\course 3\\w3_huffman_short.txt";
+	string hfmfile = "C:\\Users\\Xiaoxuan\\Desktop\\cousera\\algorithm stanford\\course 3\\w3_huffman.txt";
 	string line, ntmp, wtmp;
 	int i = 0, num_nodes;
 
@@ -74,8 +100,6 @@ int main() {
 	}
 
 
-	multiset<long long> not_visited; // store all the tree nodes and metanodes as not visited
-
 	while (hfm_tree.size() > 1){
 		// get first two nodes from the heap and combine them into a metanode, 
 		// then insert the metanode back to the heap
@@ -86,21 +110,17 @@ int main() {
 			// if the node on the top is not a "stand-alone" node, then create new tree 
 			// node inheriting from all children nodes
 			ltmp = new TreeNode(hfm_tree.begin()->GetLeft(), hfm_tree.begin()->GetRight());
-			not_visited.insert(ltmp->GetWeight());
 		}
 		else {
 			ltmp = new TreeNode(hfm_tree.begin()->GetWeight());
-			not_visited.insert(ltmp->GetWeight());
 		}
 		hfm_tree.erase(hfm_tree.begin());
 
 		if (hfm_tree.begin()->GetLeft() != NULL && hfm_tree.begin()->GetRight() != NULL){
 			rtmp = new TreeNode(hfm_tree.begin()->GetLeft(), hfm_tree.begin()->GetRight());
-			not_visited.insert(rtmp->GetWeight());
 		}
 		else {
 			rtmp = new TreeNode(hfm_tree.begin()->GetWeight());
-			not_visited.insert(rtmp->GetWeight());
 		}
 		hfm_tree.erase(hfm_tree.begin());
 
@@ -114,54 +134,11 @@ int main() {
 
 	// get the root from heap
 	TreeNode* root = new TreeNode(hfm_tree.begin()->GetLeft(), hfm_tree.begin()->GetRight());
-	not_visited.insert(root->GetWeight());
 
-	// use a BFS approach to compute node height
-	queue<TreeNode*> tnq;
-	int hfm_len = 0;
+	
+	cout << "max height is: " << maxHeight(root) - 1 << endl; // the furthese node with weight is the parent node of the NULL node
+	cout << "min height is: " << minHeight(root) - 1 << endl;
 
-
-	tnq.push(root);
-	// mark root as visited, i.e. remove node from unvisited
-	if (not_visited.find(root->GetWeight()) != not_visited.end()){
-		not_visited.erase(not_visited.equal_range(root->GetWeight()).first);
-	}
-
-	while (!tnq.empty()) {
-		TreeNode* v = tnq.front();
-		tnq.pop();
-
-		// mark v as visited, i.e. remove node from unvisited
-		if (not_visited.find(v->GetWeight()) != not_visited.end()){
-			not_visited.erase(not_visited.equal_range(v->GetWeight()).first);
-		}
-
-
-		// process all children nodes of v
-		TreeNode* lv = v->GetLeft();
-
-		// if lv has not been visited   
-		// cannot handle repeated node weight!!
-		if (lv != NULL) {
-			if (not_visited.find(lv->GetWeight()) != not_visited.end()) {
-				tnq.push(lv);
-				//mark left node to be visited
-				not_visited.erase(not_visited.equal_range(lv->GetWeight()).first);
-			}
-		}
-
-		// what if rv is NULL
-
-		TreeNode* rv = v->GetRight();
-		if (rv != NULL) {
-			if (not_visited.find(rv->GetWeight()) != not_visited.end()){
-				tnq.push(rv);
-				not_visited.erase(not_visited.equal_range(rv->GetWeight()).first);
-			}
-		}
-
-	}
-
-
+	
 	return 0;
 }
