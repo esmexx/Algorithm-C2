@@ -9,7 +9,7 @@ using namespace std;
 
 int main() {
 
-	string mwisfile = "C:\\Users\\Xiaoxuan\\Desktop\\cousera\\algorithm stanford\\course 3\\w3_mwis_short4.txt";
+	string mwisfile = "C:\\Users\\Xiaoxuan\\Desktop\\cousera\\algorithm stanford\\course 3\\w3_mwis.txt";
 	string line, ntmp, wtmp;
 	int ct = -1, num_nodes;
 	long long* node_arr = NULL;
@@ -39,8 +39,11 @@ int main() {
 	}
 
 	// Let A be the filled-in array
+	// in lecture slides, A[0]=0, A[1]=w1, but the vertex index actually starts from 1, and A[0] is merely 
+	// for the case when i=2 and i-2=0
 	long long* A = new long long[num_nodes];
-	A[0] = 0; A[1] = node_arr[1];
+	A[0] = node_arr[0];
+	A[1] = node_arr[0] > node_arr[1]? node_arr[0]:node_arr[1];
 
 	for (int i = 2; i < num_nodes; i++){
 		A[i] = max(A[i - 1], A[i - 2] + node_arr[i]);
@@ -63,8 +66,10 @@ int main() {
 
 	// properly handle base cases
 	if (node_mwis[3]){
-		node_mwis[1] = true;
-		S += node_arr[1];
+		A[1] > A[0] ? node_mwis[1] = true : node_mwis[0] = true;
+
+		if (node_mwis[1]) S += node_arr[1];
+		else S += node_arr[0];
 	}
 
 	if (node_mwis[2]){
