@@ -10,18 +10,18 @@ using namespace std;
 
 class ksnode {
 private:
-	long long value;
-	long long weight;
+	long value;
+	long weight;
 
 public:
 	ksnode() {};
-	ksnode(long long v, long long w){
+	ksnode(long v, long w){
 		value = v;
 		weight = w;
 	}
 
-	long long GetValue() const { return value; }
-	long long GetWeight() const { return weight; }
+	long GetValue() const { return value; }
+	long GetWeight() const { return weight; }
 
 };
 
@@ -31,7 +31,7 @@ int main() {
 	clock_t time;
 	time = clock();
 
-	string ksfile = "C:\\Users\\Xiaoxuan\\Desktop\\cousera\\algorithm stanford\\course 3\\w4_knapsack.txt";
+	string ksfile = "C:\\Users\\Xiaoxuan\\Desktop\\cousera\\algorithm stanford\\course 3\\w4_knapsack_big.txt";
 	string line, bwtmp, ntmp, vtmp, wtmp;
 	int i = -1, BW, N;
 
@@ -72,7 +72,7 @@ int main() {
 	for (int i = 0; i < 2; i++){
 		V[i] = new int[Vx];
 		if (i == 0){
-			for (int j = 0; j < Vx; j++)  V[i][j] = (long long) 0; // initialization A[0,x] = 0 for all x
+			for (int j = 0; j < Vx; j++)  V[i][j] = (long) 0; // initialization A[0,x] = 0 for all x
 		}
 	} 
 
@@ -81,8 +81,8 @@ int main() {
 		int ip = (i - 1) % 2; // past index, also switch between col 0 and col 1
 		for (int x = 0; x < Vx; x++){
 			if (x - num[i - 1].GetWeight() >= 0){
-				long long a = V[ip][x];
-				long long b = V[ip][x - num[i - 1].GetWeight()] + num[i - 1].GetValue();
+				long a = V[ip][x];
+				long b = V[ip][x - num[i - 1].GetWeight()] + num[i - 1].GetValue();
 				V[ic][x] = max(a, b);
 			}
 			else{
