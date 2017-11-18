@@ -79,6 +79,8 @@ int main() {
 			}
 		}
 	}
+	// reconstruction pseudocode
+	// http://www.es.ele.tue.nl/education/5MC10/Solutions/knapsack.pdf
 
 	cout << V[N][BW] << endl;
 
