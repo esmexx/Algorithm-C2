@@ -75,7 +75,7 @@ bool isCycle(int parent[], int i, int j){
 
 int main() {
 
-	string clsfile = "C:\\Users\\Xiaoxuan\\Desktop\\cousera\\algorithm stanford\\course 3\\w2_clustering.txt";
+	string clsfile = "w2_clustering.txt";
 	string line, ntmp, htmp, ttmp, ctmp;
 	int M = -1, N;
 	multiset<HEAP_ELM, HEAP_COMP> kcluster;
