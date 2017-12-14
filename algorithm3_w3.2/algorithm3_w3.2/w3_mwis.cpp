@@ -9,7 +9,7 @@ using namespace std;
 
 int main() {
 
-	string mwisfile = "C:\\Users\\Xiaoxuan\\Desktop\\cousera\\algorithm stanford\\course 3\\w3_mwis.txt";
+	string mwisfile = "w3_mwis.txt";
 	string line, ntmp, wtmp;
 	int ct = -1, num_nodes;
 	long long* node_arr = NULL;

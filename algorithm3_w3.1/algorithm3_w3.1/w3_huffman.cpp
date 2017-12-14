@@ -77,7 +77,7 @@ int minHeight(TreeNode* p) {
 
 int main() {
 
-	string hfmfile = "C:\\Users\\Xiaoxuan\\Desktop\\cousera\\algorithm stanford\\course 3\\w3_huffman.txt";
+	string hfmfile = "w3_huffman.txt";
 	string line, ntmp, wtmp;
 	int i = 0, num_nodes;
 

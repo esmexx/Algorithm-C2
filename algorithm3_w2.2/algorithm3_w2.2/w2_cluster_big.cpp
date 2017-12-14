@@ -53,7 +53,7 @@ int main() {
 	clock_t time;
 	time = clock();
 
-	string clsfile = "C:\\Users\\Xiaoxuan\\Desktop\\cousera\\algorithm stanford\\course 3\\w2_clustering_big.txt";
+	string clsfile = "w2_clustering_big.txt";
 	
 	string line, Ne, Nb, Te, TeStr;
 

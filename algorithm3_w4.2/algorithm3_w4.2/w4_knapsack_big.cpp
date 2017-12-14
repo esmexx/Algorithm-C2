@@ -31,7 +31,7 @@ int main() {
 	clock_t time;
 	time = clock();
 
-	string ksfile = "C:\\Users\\Xiaoxuan\\Desktop\\cousera\\algorithm stanford\\course 3\\w4_knapsack_big.txt";
+	string ksfile = "w4_knapsack_big.txt";
 	string line, bwtmp, ntmp, vtmp, wtmp;
 	int i = -1, BW, N;
 

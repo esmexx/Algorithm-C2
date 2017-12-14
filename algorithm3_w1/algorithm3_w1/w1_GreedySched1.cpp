@@ -50,7 +50,7 @@ public:
 
 int main(){
 
-	string gsfile = "C:\\Users\\Xiaoxuan\\Desktop\\cousera\\algorithm stanford\\course 3\\w1_jobs.txt";
+	string gsfile = "w1_jobs.txt";
 	string line, tmp, wtmp, ltmp;
 	HEAP_ELM* num = NULL;
 	int i = 0, N;

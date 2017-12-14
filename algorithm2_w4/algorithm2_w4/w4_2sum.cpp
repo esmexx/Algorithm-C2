@@ -33,7 +33,7 @@ int main() {
 	}
 
 	// read and convert txt file
-	string txtfile = "C:\\Users\\Xiaoxuan\\Desktop\\cousera\\algorithm stanford\\course 2\\prob-2sum.txt";
+	string txtfile = "prob-2sum.txt";
 	string line, tmp;
 	long long i = 0;
 	

@@ -41,7 +41,7 @@ int main(){
 	int* num_conn = new int[NUM_VER]; // 1d array storing number of connections for each vertice
 	int vc = 0; // vertice counter
 
-	string sptfile = "C:\\Users\\Xiaoxuan\\Desktop\\cousera\\algorithm stanford\\course 2\\\\dijkstraData.txt";
+	string sptfile = "dijkstraData.txt";
 	string line, tmp_ver, tmp_conn, tmp_edge;
 
 	ifstream myfile(sptfile);

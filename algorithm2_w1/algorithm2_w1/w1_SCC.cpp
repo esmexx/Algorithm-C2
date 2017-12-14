@@ -237,8 +237,8 @@ int main(){
 	}
 
 
-	//string sccfile = "C:\\Users\\Xiaoxuan\\Desktop\\cousera\\algorithm stanford\\course 2\\SCC_short.txt";
-	string sccfile = "C:\\Users\\Xiaoxuan\\Desktop\\cousera\\algorithm stanford\\course 2\\SCC.txt";
+	//string sccfile = "SCC_short.txt";
+	string sccfile = "SCC.txt";
 	ifstream myfile(sccfile);
 
 	time = clock();

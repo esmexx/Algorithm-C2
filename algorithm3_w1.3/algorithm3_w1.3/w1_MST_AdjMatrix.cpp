@@ -17,7 +17,7 @@ public:
 
 int main() {
 
-	string mstfile = "C:\\Users\\Xiaoxuan\\Desktop\\cousera\\algorithm stanford\\course 3\\w1_edges.txt";
+	string mstfile = "w1_edges.txt";
 	string line, nvtmp, netmp, htmp, ttmp, ctmp;
 	int i = 0, Nv, Ne;
 	int** AdjMat = NULL;

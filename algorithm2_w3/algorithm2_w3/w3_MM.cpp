@@ -43,7 +43,7 @@ int main(){
 
 	int* num = new int[N];
 
-	string mmfile = "C:\\Users\\Xiaoxuan\\Desktop\\cousera\\algorithm stanford\\course 2\\Median.txt";
+	string mmfile = "Median.txt";
 	string line, tmp;
 	int i = 0;
 
