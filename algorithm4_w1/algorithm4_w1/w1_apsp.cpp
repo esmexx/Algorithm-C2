@@ -129,9 +129,16 @@ int main() {
 
 	for (int i = 0; i < V; i++){
 		int d = BellmanFord(num, V, E, i + 1);
-		if (d < shortest_shortest_path)
-			shortest_shortest_path = d;
+        if (d > INT_MIN) {
+		    if (d < shortest_shortest_path)
+			    shortest_shortest_path = d;
+        }
+        else {
+            shortest_shortest_path = d;
+            break;
+        }
 	}
+
 
 	cout << shortest_shortest_path << endl;
 
