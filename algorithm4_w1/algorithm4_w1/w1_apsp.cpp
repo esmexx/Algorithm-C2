@@ -47,15 +47,19 @@ int BellmanFord(GraphElm* graph, int num_ver, int num_edge, int src){
 	dist[src - 1] = 0;
 
 	for (int i = 1; i < num_ver; i++){
+		bool stop = true; // stop early if dist doesn't change
 		for (int j = 0; j < num_ver; j++) { // loop through all edges and update
 			for (int k = 0; k < graph[j].GetNumTails(); k++) {
 				int u = graph[j].GetHead() - 1;
 				int v = graph[j].GetTail(k).first - 1;
 				int cost = graph[j].GetTail(k).second;
-				if (dist[u] != INT_MAX && dist[u] + cost < dist[v])
+				if (dist[u] != INT_MAX && dist[u] + cost < dist[v]) {
 					dist[v] = dist[u] + cost;
+				    stop = false;
+				}
 			}
 		}
+        if (stop) break;
 	}
 
 
