@@ -20,42 +20,40 @@ double getdist(pair<double, double> src, pair<double, double> dest) {
 // where the first vertex (vertex 0) is always included
 // e.g., 3 comb 5 gives 6 of such combinations
 // http://rosettacode.org/wiki/Combinations#C.2B.2B
-int comb(int N, int M){
-    int np = 0;
-    string bitmask(M-1, 1);
-    bitmask.resize(N-1, 0);
+int* comb(int N, int M, long long& num_subsets){
+    // generate each set S of size m that contains the first vertex
+    M--;
+    N--;
 
-    do { // generate each set S of size m that contains the first vertex
-        //cout << " 0";
-        //for (int i = 0; i < N-1; i++){
-        //    if (bitmask[i]) cout << " " << i+1;
-        //}
-        //cout << endl;
-        np++;
+    string bitmask(M, 1);
+    bitmask.resize(N, 0);
+
+    long long numt = 1, det = 1;
+    for (int i = 0; i < M; i++){
+        numt = (N - i) * numt;
+         det = (M - i) * det;
+    }
+    num_subsets = numt / det;
+
+    // create an 1d array to store all the combinations 
+    int* subsets = new int[num_subsets * (M + 1)];
+
+    int k = 0;
+    do {
+        subsets[k * (M + 1)] = 0; // the first element is always the first vertex 
+        int j = 1;
+        for (int i = 0; i < N; i++) {
+            if (bitmask[i]) {
+                subsets[k * (M + 1) + j] = i + 1;
+                j++;
+            }
+        }
+        k++;
     } while (prev_permutation(bitmask.begin(), bitmask.end()));
 
-    return np;
+    return subsets;
 
 }
-
-//int comb(int N, int M){
-//    int np = 0;
-//    string bitmask(M , 1);
-//    bitmask.resize(N , 0);
-//
-//    do { // generate each set S of size m that contains the first vertex
-//        if (bitmask[0]) {
-//            //for (int i = 0; i < N; i++){
-//            //    if (bitmask[i]) cout << " " << i;
-//            //}
-//            //cout << endl;
-//            np++;
-//        }
-//    } while (prev_permutation(bitmask.begin(), bitmask.end()));
-//
-//    return np;
-//
-//}
 
 int main() {
 
@@ -99,10 +97,13 @@ int main() {
     clock_t time;
     time = clock();
 
-    cout << comb(25, 12) << endl;
+    long long nss = 0;
+    comb(5, 2, nss);
 
     time = clock() - time;
     cout << "Time spent:" << (float)time / CLOCKS_PER_SEC << "seconds" << endl;
+
+    cout << nss << endl;
 
     delete[] num;
 
