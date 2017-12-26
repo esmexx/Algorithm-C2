@@ -16,44 +16,33 @@ double getdist(pair<double, double> src, pair<double, double> dest) {
     return sqrt(pow(src.first - dest.first, 2) + pow(src.second - dest.second, 2));
 }
 
-// generate all combinations (of size m-1) of the integers from 1 to n-1 in sorted order,
-// where the first vertex (vertex 0) is always included
-// e.g., 3 comb 5 gives 6 of such combinations
-// http://rosettacode.org/wiki/Combinations#C.2B.2B
-int* comb(int N, int M, long long& num_subsets){
-    // generate each set S of size m that contains the first vertex
-    M--;
-    N--;
 
-    string bitmask(M, 1);
-    bitmask.resize(N, 0);
+// modified from http://rosettacode.org/wiki/Combinations#C.2B.2B
+void getbitmask(int num_cities, int& num_subsets) {
 
-    long long numt = 1, det = 1;
-    for (int i = 0; i < M; i++){
-        numt = (N - i) * numt;
-         det = (M - i) * det;
-    }
-    num_subsets = numt / det;
+    num_subsets = 1 << num_cities;
+    int idx = 0; 
+    int* bitmask = new int[num_subsets];
 
-    // create an 1d array to store all the combinations
-    int* subsets = new int[num_subsets * (M + 1)];
+    for (int m = 1; m <= num_cities; m++){
+        string strmask(m, 1);
+        strmask.resize(num_cities, 0);
 
-    int k = 0;
-    do {
-        subsets[k * (M + 1)] = 0; // the first element is always the first vertex 
-        int j = 1;
-        for (int i = 0; i < N; i++) {
-            if (bitmask[i]) {
-                subsets[k * (M + 1) + j] = i + 1;
-                j++;
+        do {
+            int tmp = 0;
+            for (int i = 0; i < num_cities; i++){
+                if (strmask[i]){
+                    tmp = (1 << i) | tmp;
+                }
             }
-        }
-        k++;
-    } while (prev_permutation(bitmask.begin(), bitmask.end()));
-
-    return subsets;
+            bitmask[idx] = tmp;
+            idx++;
+            //cout << tmp << endl;
+        } while (prev_permutation(strmask.begin(), strmask.end()));
+    }
 
 }
+
 
 int main() {
 
@@ -101,34 +90,18 @@ int main() {
         }
     }
 
-    // dp algorithm from lecture slides
-    int** A = new int*[ncities];
-    for (int i = 0; i < ncities; i++){
-        A[i] = new int[ncities];
-        // initialize base case
-        A[i][0] = numeric_limits<double>::max();
-    }
-    A[0][0] = 0;
-
-    long long nss = 0; // number of subsets
-    for (int m = 1; m < ncities; m++){ // m = subproblem size
-        int* subsets = comb(ncities, m + 1, nss); // get all possible subsets with size m = 2, or 3, or,..., or n
-        for (int n = 0; n < nss; n++){ // loop over each subset
-            for (int k = 1; k < m + 1; k++){ // for each vertex j in the subset who is not the first vertex  
-                int j = subsets[n * (m + 1) + k];
-                
-            }
-        }
-    }
 
 
+    clock_t time;
+    time = clock();
 
+    int nss = 0;
+    getbitmask(25, nss);
 
+    time = clock() - time;
+    cout << "Time spent:" << (float)time / CLOCKS_PER_SEC << "seconds" << endl;
 
-    for (int i = 0; i < ncities; i++){
-        delete A[i];
-    }
-    delete[] A;
+    cout << "total number:" << nss << endl;
 
     for (int i = 0; i < ncities; i++){
         delete distmap[i];
