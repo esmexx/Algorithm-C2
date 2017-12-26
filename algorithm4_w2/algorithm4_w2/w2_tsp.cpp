@@ -35,7 +35,7 @@ int* comb(int N, int M, long long& num_subsets){
     }
     num_subsets = numt / det;
 
-    // create an 1d array to store all the combinations 
+    // create an 1d array to store all the combinations
     int* subsets = new int[num_subsets * (M + 1)];
 
     int k = 0;
@@ -64,6 +64,7 @@ int main() {
 
     pair<double, double>* num = NULL;
 
+    // load the txt file and store the city coordinates
     ifstream myfile(tspfile);
     if (myfile.is_open()){
         while (getline(myfile, line)){
@@ -86,25 +87,54 @@ int main() {
         }
     }
 
-
-
-
-    pair<double, double> S;
-
-    for (int m = 1; m < ncities; m++){
+    // precompute distance between cities
+    double** distmap = new double*[ncities];
+    for (int i = 0; i < ncities; i++){
+        distmap[i] = new double[ncities];
+        for (int j = 0; j < ncities; j++){
+            if (j != i){
+                distmap[i][j] = getdist(num[i], num[j]);
+            }
+            else {
+                distmap[i][j] = 0;
+            }
+        }
     }
 
-    clock_t time;
-    time = clock();
+    // dp algorithm from lecture slides
+    int** A = new int*[ncities];
+    for (int i = 0; i < ncities; i++){
+        A[i] = new int[ncities];
+        // initialize base case
+        A[i][0] = numeric_limits<double>::max();
+    }
+    A[0][0] = 0;
 
-    long long nss = 0;
-    comb(5, 2, nss);
+    long long nss = 0; // number of subsets
+    for (int m = 1; m < ncities; m++){ // m = subproblem size
+        int* subsets = comb(ncities, m + 1, nss); // get all possible subsets with size m = 2, or 3, or,..., or n
+        for (int n = 0; n < nss; n++){ // loop over each subset
+            for (int k = 1; k < m + 1; k++){ // for each vertex j in the subset who is not the first vertex  
+                int j = subsets[n * (m + 1) + k];
+                
+            }
+        }
+    }
 
-    time = clock() - time;
-    cout << "Time spent:" << (float)time / CLOCKS_PER_SEC << "seconds" << endl;
 
-    cout << nss << endl;
 
+
+
+    for (int i = 0; i < ncities; i++){
+        delete A[i];
+    }
+    delete[] A;
+
+    for (int i = 0; i < ncities; i++){
+        delete distmap[i];
+    }
+    delete[] distmap;
+    
     delete[] num;
 
     return 0;
