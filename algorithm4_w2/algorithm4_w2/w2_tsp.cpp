@@ -10,45 +10,13 @@
 
 using namespace std;
 
-double getdist(pair<double, double> src, pair<double, double> dest) {
+double GetDist(pair<double, double> src, pair<double, double> dest) {
     return sqrt(pow(src.first - dest.first, 2) + pow(src.second - dest.second, 2));
 }
 
-
-// modified from http://rosettacode.org/wiki/Combinations#C.2B.2B
-void getbitmask(long num_cities, long num_subsets, long* & subset_bitmasks, pair<long, long>* & subset_interval_indices) {
-
-    long idx = 0; // index counter for subsets
-    subset_interval_indices[0] = make_pair(-1, -1); // subset of size 0 does not exist
-
-    for (long m = 1; m <= num_cities; m++){
-        // initialize bitmask to represent subset of size m
-        string strmask(m, 1);
-        strmask.resize(num_cities, 0);
-
-        long interval_left = idx; // record starting position of the interval
-
-        // permute the bitmask thoroughly
-        do {
-            long tmp = 0;
-            for (long i = 0; i < num_cities; i++){
-                if (strmask[i]){
-                    tmp = (1 << i) | tmp;
-                }
-            }
-            subset_bitmasks[idx] = tmp;
-            idx++;
-        } while (prev_permutation(strmask.begin(), strmask.end()));
-
-        subset_interval_indices[m] = make_pair(interval_left, idx); // the interval range is [left, idx)
-    }
-
-}
-
-
 int main() {
 
-    string tspfile = "C:\\Users\\Xiaoxuan\\Desktop\\cousera\\algorithm stanford\\course 4\\w2_tsp_short.txt";
+    string tspfile = "w2_tsp.txt";
     string line, tnc, tx, ty;
     long i = -1, ncities;
     double locx, locy;
@@ -84,7 +52,7 @@ int main() {
         distmap[i] = new double[ncities];
         for (long j = 0; j < ncities; j++){
             if (j != i){
-                distmap[i][j] = getdist(num[i], num[j]);
+                distmap[i][j] = GetDist(num[i], num[j]);
             }
             else {
                 distmap[i][j] = 0;
@@ -94,15 +62,57 @@ int main() {
 
 
     // the bitmask dynamic programming solution to Traveling Salesman
-    // http://www.cs.ucf.edu/~dmarino/progcontests/modules/dptsp/DP-TSP-Notes.pdf
+    long nsubsets = 1 << ncities; // number of possible subsets: 2^n
+    long bitmask;
 
-    long nsubsets = (1 << ncities) - 1; // number of possible subsets: 2^n - 1
-    long* bitmask = new long[nsubsets]; // all possible subsets of size m = 1,2,3,... num_cities are presented in terms of bitmask
-    pair<long, long>* sindices = new pair<long, long>[ncities]; // stores the beginning and ending position of subset S of the same size in the bitmask array, [a, b)
+    double** A = new double*[nsubsets];
+    for (long i = 0; i < nsubsets; i++) { 
+        A[i] = new double[ncities]; 
+        for (long j = 0; j < ncities; j++)
+            A[i][j] = DBL_MAX; // some initialization
+    }
 
-    getbitmask(ncities, nsubsets, bitmask, sindices);
+    // fulfill base case
+    A[1][0] = 0; // A[S, 1] = 0 if S = {1}
 
+    for (long m = 2; m <= ncities; m++){ // m = subproblem size
+        string strmask(m, 1);
+        strmask.resize(ncities, 0);
 
+        do {
+            if (strmask[0]){ // for each set S of size m that contains 1
+                bitmask = 1;
+                for (long i = 1; i < ncities; i++){
+                    if (strmask[i]){
+                        bitmask = (1 << i) | bitmask;
+                    }
+                }
+
+                // for each j belonged to S, where j != 1
+                for (int j = 1; j < ncities; j++){ // exclude city 1 from the choice of j
+                    if (((bitmask >> j) & 1) == 1){ // check what j is in the subset S
+                        long bitmask_nj = bitmask - (1 << j); // remove j from the subset
+                        for (int k = 0; k < ncities; k++){
+                            if (((bitmask_nj >> k) & 1) == 1){ // for all the k in the subset, where k != j
+                                if (A[bitmask_nj][k] + distmap[k][j] < A[bitmask][j]) // A[S, j] = min{A[S-{j}, k] + cost[k,j]} for k in S and k != j
+                                    A[bitmask][j] = A[bitmask_nj][k] + distmap[k][j];
+                            }
+                        }
+                    }
+                }
+
+            }
+        } while (prev_permutation(strmask.begin(), strmask.end()));
+    }
+
+    // get the minDist from min{A[{1,2,...,n}, j]+cost[j,1]}
+    double minDist = DBL_MAX;
+    for (long j = 1; j < ncities; j++){
+        if (A[nsubsets-1][j] + distmap[j][0] < minDist)
+            minDist = A[nsubsets-1][j] + distmap[j][0];
+    }
+
+    cout << minDist << endl;
 
 
 
@@ -114,8 +124,10 @@ int main() {
     }
     delete[] distmap;
 
-    delete[] bitmask;
-    delete[] sindices;
+    for (long i = 0; i < nsubsets; i++){
+        delete A[i];
+    }
+    delete[] A;
 
     return 0;
 
