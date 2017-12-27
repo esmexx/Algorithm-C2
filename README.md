@@ -21,3 +21,10 @@
 | 3.1 | Huffman Encoding Tree (bottom-up) |  | Heap, Multiset |  
 | 3.2 | Max-Weight Independent Set | Dynamic Programming and Reconstruction | 1D Array | 
 | 4.1 | Knapsack Problem | Dynamic Programming | 2D Array |
+
+* Course 4: Shortest Paths Revisited, NP-Complete Problems and What To Do About Them
+
+| Week  | 	          Problem            |     Method    | Implementation |
+| ----- | ------------------------------ | ------------- | ------------- |
+|   1   |                All-Pairs Shortest Path  |  Dynamic Programming, BellmanFord (EBellflaging) | |
+|   2   |                Travelling Salesman Problem  | Dynamic Programming | Bitmask |
