@@ -14,9 +14,24 @@ double GetDist(pair<double, double> src, pair<double, double> dest) {
     return sqrt(pow(src.first - dest.first, 2) + pow(src.second - dest.second, 2));
 }
 
+void PrintMatrix(double**& matrix, long width, long height){
+    
+    for (long i = 0; i < height; i++){
+        for (long j = 0; j < width; j++){
+            if (matrix[i][j] == DBL_MAX){
+                cout << "INF|";
+            }
+            else {
+                cout << matrix[i][j] << "|";
+            }
+        }
+        cout << endl;
+    }
+}
+
 int main() {
 
-    string tspfile = "w2_tsp.txt";
+    string tspfile = "C:\\Users\\Xiaoxuan\\Desktop\\cousera\\algorithm stanford\\course 4\\w2_tsp.txt";
     string line, tnc, tx, ty;
     long i = -1, ncities;
     double locx, locy;
@@ -60,8 +75,15 @@ int main() {
         }
     }
 
+    //cout << distmap[11][12] << endl;
+
 
     // the bitmask dynamic programming solution to Traveling Salesman
+    // http://www.cs.ucf.edu/~dmarino/progcontests/modules/dptsp/DP-TSP-Notes.pdf
+    // https://github.com/cormacpayne/Data-Structures-and-Algorithms/blob/master/Notes/Bitmask-Dynamic-Programming.md
+    // https://tausiq.wordpress.com/2013/05/30/travelling-salesman-problem-tsp-algorithm-source-code-cc/
+    // https://www.codeday.top/2017/09/08/40676.html
+
     long nsubsets = 1 << ncities; // number of possible subsets: 2^n
     long bitmask;
 
@@ -74,7 +96,10 @@ int main() {
 
     // fulfill base case
     A[1][0] = 0; // A[S, 1] = 0 if S = {1}
+    //for (long i = 1; i < ncities; i++) 
+    //    A[1 << i][0] = DBL_MAX; // A[S, 1] = INF otherwise
 
+    
     for (long m = 2; m <= ncities; m++){ // m = subproblem size
         string strmask(m, 1);
         strmask.resize(ncities, 0);
@@ -104,6 +129,9 @@ int main() {
             }
         } while (prev_permutation(strmask.begin(), strmask.end()));
     }
+
+
+    //PrintMatrix(A, ncities, nsubsets);
 
     // get the minDist from min{A[{1,2,...,n}, j]+cost[j,1]}
     double minDist = DBL_MAX;
