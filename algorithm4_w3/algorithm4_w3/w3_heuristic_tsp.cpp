@@ -39,20 +39,6 @@ public:
 
 };
 
-class TspComp {
-public:
-    bool operator() (const TspNode& n1, const TspNode& n2) const {
-        if (fabs(n1.GetDist2Src() - n2.GetDist2Src()) < 1.0e-12f) {
-            return n1.GetCityNum() < n2.GetCityNum();
-        }
-        else {
-            return n1.GetDist2Src() < n2.GetDist2Src();
-        }
-    }
-};
-
-
-
 
 int main() {
 
@@ -85,8 +71,6 @@ int main() {
 
 
     // https://en.wikipedia.org/wiki/Nearest_neighbour_algorithm
-    // using heap to find the cloest city
-    multiset<TspNode, TspComp> dist_heap;
 
     // keep track of visited cities
     bool* visited = new bool[ncities];
@@ -104,25 +88,26 @@ int main() {
 
     // find out the shortest edge connecting the tour head and an unvisited node V
     while (num_visited_city < ncities){ // if all the nodes are visited, then terminate
-        dist_heap.clear();
+        TspNode min_dist = TspNode(LONG_MAX,0,0);
         for (long i = 0; i < ncities; i++){
             if (!visited[i]) {
                 num[i].CalcDist2Src(tour_head);
-                dist_heap.insert(num[i]);
+                if (fabs(num[i].GetDist2Src() - min_dist.GetDist2Src()) < 1.0e-20f){
+                    if (num[i].GetCityNum() < min_dist.GetCityNum())
+                        min_dist = num[i];
+                }
+                else if (num[i].GetDist2Src() < min_dist.GetDist2Src()) {
+                    min_dist = num[i];
+                }
             }
         }
         // set tour head to V
-        tour_head = *dist_heap.begin();
+        tour_head = min_dist;
         // mark V as visited;
         visited[tour_head.GetCityNum() - 1] = true;
         // add edge cost to total
         tsp_cost += tour_head.GetDist2Src();
         num_visited_city++;
-        if (num_visited_city % 100 == 0) {
-            cout << num_visited_city << endl;
-            time = clock() - time;
-            cout << "Time spent:" << (float)time / CLOCKS_PER_SEC << "seconds" << endl;
-        }
 
     }
 
