@@ -42,7 +42,7 @@ public:
 
 int main() {
 
-    string tspfile = "w3_nn.txt";
+    string tspfile = "C:\\Users\\Xiaoxuan\\Desktop\\cousera\\algorithm stanford\\course 4\\w3_nn.txt";
     string line, tnc, tn, tx, ty;
     long i = -1, ncities;
 
@@ -115,7 +115,7 @@ int main() {
     tour_head.CalcDist2Src(num[0]);
     tsp_cost += tour_head.GetDist2Src();
 
-    cout << "cost of traveling salesman tour is " << tsp_cost << endl;
+    printf("cost of traveling salesman tour is %10.3f \n", tsp_cost);
 
     delete[] num;
     delete[] visited;
