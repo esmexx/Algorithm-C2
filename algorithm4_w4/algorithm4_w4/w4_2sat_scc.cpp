@@ -14,8 +14,7 @@ using namespace std;
 
 
 class GraphElm{
-
-
+public:
     // direct initialization
     // https://msdn.microsoft.com/en-us/library/s16xw1a8.aspx#Anchor_2
     GraphElm(): isVisited(false) {}
@@ -33,10 +32,47 @@ class GraphElm{
 
 
 typedef vector<GraphElm> Graph;  // https://en.wikipedia.org/wiki/Typedef
+int size;
 
-void GraphFromTxt(char *path, Graph) {
+void GraphFromTxt(char *path, Graph& graph) {
 
+    ifstream input(path);
+    if (input.is_open()){
 
+        int head, tail, nhead, ntail;
+        input >> size;
+        graph.push_back(GraphElm()); // skipe index 0 and start from 1
+        graph.resize(2*size + 1);
+        while (input >> head >> tail){
+            // all u's range from 1 to size, and all u_bar's range from size+1 to 2*size+1 
+            if (head < 0){
+                nhead = -head;
+                head = size - head;
+            }
+            else {
+                nhead = size + head;
+            }
+
+            if (tail < 0){
+                ntail = -tail;
+                tail = size - tail;
+            }
+            else{
+                ntail = size + tail;
+            }
+            // for each clause (u OR v), we add edges u_bar -> v and v_bar -> u to graph
+            graph[nhead].tails.push_back(tail);
+            graph[ntail].tails.push_back(head);
+        }
+    }
+
+}
+
+int main() {
+
+    Graph graph;
+    
+    GraphFromTxt("2sat1.txt", graph);
 
 
 }
