@@ -28,3 +28,5 @@
 | ----- | ------------------------------ | ------------- | ------------- |
 |   1   |                All-Pairs Shortest Path  |  Dynamic Programming, BellmanFord (EBellflaging) | |
 |   2   |                Travelling Salesman Problem  | Dynamic Programming | Bitmask |
+|   3   |  Travelling Salesman Problem (Heuristic) | Nearest Neighbour | |
+|   4   |  2SAT Problem | Strongly Connected Component | Stack |
